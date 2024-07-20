@@ -3,20 +3,52 @@ body {
     margin: 0;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(247, 247, 247);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(194, 194, 194);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(158, 158, 158);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgb(102, 102, 102);
+    border-radius: 10px;
+}
+
 .chat-room {
     height: 100vh;
 
     display: flex;
 }
 
-.room-list {
+.aside {
     width: 400px;
-    overflow-y: auto;
     padding: 10px;
 
     border-right: 1px solid rgb(196, 196, 196);
     background-color: #ffffff;
     
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.room-list {
+    overflow-y: auto;
+    padding-right: 10px;
+
     display: flex;
     flex-direction: column;
     gap: 10px;

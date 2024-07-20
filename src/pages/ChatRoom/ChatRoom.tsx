@@ -4,46 +4,29 @@ import MessageItem from './components/MessageItem'
 import RoomEntry from './components/RoomEntry'
 import type * as type from './components/Type'
 import { useState } from 'react'
-import { getFetcher } from '../../utils/utils'
-
-const testMessage: type.Message = {
-    messageId: 1,
-    roomId: 1,
-    sender: "CYH",
-    content: "Hello, this is a test message.",
-    time: Date.now(),
-}
-
-const longMessage: type.Message = {
-    messageId: 2,
-    roomId: 1,
-    sender: "CYH",
-    content: "The CSS anchor positioning module defines features that allow you to tether elements together. Certain elements are defined as anchor elements; anchor-positioned elements can then have their size and position set based on the size and location of the anchor elements to which they are bound.",
-    time: Date.now(),
-}
+import { getFetcher, postFetcher } from '../../utils/utils'
+import useSWRMutation from 'swr/mutation'
 
 export default function ChatRoom () {
-    const [roomId, setRoomId] = useState<number | null>(null);
-    const [roomName, setRoomName] = useState<string | null>(null);
+    const [roomId, setRoomId] = useState<number | null>(Number(localStorage.getItem('lastVisitedRoomId')));
+    const [roomName, setRoomName] = useState<string | null>(localStorage.getItem('lastVisitedRoomName'));
 
     const handleRoomSelect = (selectedRoomID: number, selectedRoomName: string) => {
         console.log("Entering room " + selectedRoomID);
         setRoomId(selectedRoomID);
         setRoomName(selectedRoomName);
+        localStorage.setItem('lastVisitedRoomId', selectedRoomID.toString());
+        localStorage.setItem('lastVisitedRoomName', selectedRoomName);
     };
 
     const { // fetch room list data
-        data: roomData,
-        error: roomError,
-        isLoading: roomIsLoading,
+        data: roomData
     } = useSWR<type.RoomListRes>('/api/room/list', getFetcher, {
         refreshInterval: 1000,
     });
 
     const { // fetch message list data
         data: messageListData,
-        error: messageListError,
-        isLoading: messageListIsLoading,
     } = useSWR<type.RoomMessageListRes>(
         () => {
             if (roomId === null) return false;
@@ -51,21 +34,84 @@ export default function ChatRoom () {
         }, getFetcher, { refreshInterval: 1000 }
     )
 
+    const {
+        trigger: addRoomTrigger
+    } = useSWRMutation<
+        { roomId: number },
+        Error,
+        string,
+        {
+            user: string;
+            roomName: string;
+        }
+    >("/api/room/add", postFetcher);
+
+    async function addNewRoom () {
+        const newRoomName = prompt("Enter the name for the new room:") || "New Room";
+        const newId = await addRoomTrigger({
+            user: "CYH",
+            roomName: newRoomName,
+        })
+        console.log("Created room: " + newId.roomId);
+    };
+
+    const {
+        trigger: addMessageTrigger
+    } = useSWRMutation<
+        null,
+        Error,
+        string,
+        {
+            roomId: number;
+            content: string;
+            sender: string;
+        }
+    >("/api/message/add", postFetcher);
+
+    async function addNewMessage ( currentRoomId: number ) {
+        let textarea = document.querySelector('.input-area textarea') as HTMLTextAreaElement;
+        let messageContent = textarea?.value;
+        if (textarea && messageContent) {
+            await addMessageTrigger({
+                roomId: currentRoomId,
+                content: messageContent,
+                sender: "CYH",
+            });
+            textarea.value = '';
+        } else {
+            console.error("Message content is empty or undefined.");
+        }
+    }
+
+    
+
     return (
         <div className='chat-room'>
-            <aside className='room-list'>
+            <aside className='aside'>
                 <nav className='operate'>
                     <h1>Welcom, CYH!</h1>
-                    <button className='create-room-button'></button>
+                    <button 
+                        className='create-room-button' 
+                        onClick={addNewRoom}></button>
                 </nav>
-                {roomData?.rooms.map(room => (
-                    <RoomEntry
-                        roomId={room.roomId}
-                        roomName={room.roomName || "Unnamed Room"}
-                        lastMessage={room.lastMessage}
-                        onRoomSelect={handleRoomSelect}
-                    />
-                ))}
+                <div className='room-list'>
+                    {roomData?.rooms
+                    .sort((a, b) => {
+                        const timeA = a.lastMessage?.time ?? 0;
+                        const timeB = b.lastMessage?.time ?? 0;
+                        
+                        return timeB - timeA;
+                    })
+                    .map(room => (
+                        <RoomEntry
+                            roomId={room.roomId}
+                            roomName={room.roomName || "Unnamed Room"}
+                            lastMessage={room.lastMessage}
+                            onRoomSelect={handleRoomSelect}
+                        />
+                    ))}
+                </div>
+                
             </aside>
             <div className='room-body'>
                 <div className='room-header'>
@@ -73,13 +119,20 @@ export default function ChatRoom () {
                 </div>
                 <div className='message-area'>
                     {messageListData?.messages.map(message => (
-                        <MessageItem message={message} />
+                        <MessageItem message={message}/>
                     ))}
                 </div>
                 <div className='input-area'>
                     <textarea placeholder='Start texting...' />
-                    <button>Send</button>
-                </div>                
+                    {
+                        roomId !== null && roomId !== undefined ? (
+                            <button onClick={() => addNewMessage(roomId)}>Send</button>
+                        ) : (
+                            <button disabled>Send</button>
+                        )
+                    }
+                    
+                </div>
             </div>
         </div>
     )

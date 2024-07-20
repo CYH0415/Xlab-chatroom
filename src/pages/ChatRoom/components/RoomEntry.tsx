@@ -22,14 +22,31 @@ export default function RoomEntry ( props: RoomEntryProps ) {
             </div>
         )
     } else {
+        const time = formatDate(props.lastMessage.time);
         return (
             <div className='room-entry' onClick={handleClick}>
                 <div className="room-entry-header">
                     <h3>{props.roomName}</h3>
-                    <p>{props.lastMessage?.time}</p>
+                    <p>{time}</p>
                 </div>
                 <p>{props.lastMessage?.sender}: {props.lastMessage?.content}</p>
             </div>
         )
+    }
+}
+
+function formatDate(timestamp: number): string {
+    const now = new Date();
+    const msgDate = new Date(timestamp);
+
+    const diffInMilliseconds = now.getTime() - msgDate.getTime();
+    const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+    if (diffInDays === 0) {
+        return msgDate.toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' });
+    } else if (diffInDays === 1) {
+        return 'Yesterday';
+    } else {
+        return msgDate.toLocaleDateString('default', { year: 'numeric', month: '2-digit', day: '2-digit' });
     }
 }

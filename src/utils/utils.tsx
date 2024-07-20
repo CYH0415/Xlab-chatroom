@@ -26,7 +26,7 @@ export async function postFetcher(
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(body),
+            body: JSON.stringify(body.arg),
         })
         .then((res) => res.json())
     ) as Response<any>;
