@@ -1,18 +1,35 @@
+import { Message } from "./Type";
+
 interface RoomEntryProps {
-    name: string;
-    roomID: number;
-    recentUser: string;
-    recentMessage: string;
-    time: string;
+    roomId: number;
+    roomName: string;
+    lastMessage: Message | null;
+    onRoomSelect: (selectedRoomId: number, selectedRoomName: string ) => void;
 }
+
 export default function RoomEntry ( props: RoomEntryProps ) {
-    return (
-        <div className='room-entry'>
-            <div className="room-entry-header">
-                <h3>{props.name}</h3>
-                <p> {props.time}</p>
+    const handleClick = () => {
+        props.onRoomSelect(props.roomId, props.roomName);
+    };
+
+    if (props.lastMessage === null) {
+        return (
+            <div className='room-entry' onClick={handleClick}>
+                <div className="room-entry-header">
+                    <h3>{props.roomName}</h3>
+                </div>
+                <p>No message yet.</p>
             </div>
-            <p>{props.recentUser}: {props.recentMessage}</p>
-        </div>
-    )
+        )
+    } else {
+        return (
+            <div className='room-entry' onClick={handleClick}>
+                <div className="room-entry-header">
+                    <h3>{props.roomName}</h3>
+                    <p>{props.lastMessage?.time}</p>
+                </div>
+                <p>{props.lastMessage?.sender}: {props.lastMessage?.content}</p>
+            </div>
+        )
+    }
 }

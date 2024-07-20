@@ -106,6 +106,7 @@ body {
     
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .room-header {
@@ -137,12 +138,7 @@ body {
 }
 
 .input-area {
-    height: 100px;
     padding: 20px;
-    padding-top: 0;
-    margin-bottom: 20px;
-
-    backdrop-filter: blur(10px);
 
     display: flex;
     justify-content: center;

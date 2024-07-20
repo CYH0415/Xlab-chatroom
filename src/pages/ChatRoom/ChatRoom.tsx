@@ -1,8 +1,56 @@
 import './ChatRoom.css'
+import useSWR from 'swr'
 import MessageItem from './components/MessageItem'
 import RoomEntry from './components/RoomEntry'
+import type * as type from './components/Type'
+import { useState } from 'react'
+import { getFetcher } from '../../utils/utils'
+
+const testMessage: type.Message = {
+    messageId: 1,
+    roomId: 1,
+    sender: "CYH",
+    content: "Hello, this is a test message.",
+    time: Date.now(),
+}
+
+const longMessage: type.Message = {
+    messageId: 2,
+    roomId: 1,
+    sender: "CYH",
+    content: "The CSS anchor positioning module defines features that allow you to tether elements together. Certain elements are defined as anchor elements; anchor-positioned elements can then have their size and position set based on the size and location of the anchor elements to which they are bound.",
+    time: Date.now(),
+}
 
 export default function ChatRoom () {
+    const [roomId, setRoomId] = useState<number | null>(null);
+    const [roomName, setRoomName] = useState<string | null>(null);
+
+    const handleRoomSelect = (selectedRoomID: number, selectedRoomName: string) => {
+        console.log("Entering room " + selectedRoomID);
+        setRoomId(selectedRoomID);
+        setRoomName(selectedRoomName);
+    };
+
+    const { // fetch room list data
+        data: roomData,
+        error: roomError,
+        isLoading: roomIsLoading,
+    } = useSWR<type.RoomListRes>('/api/room/list', getFetcher, {
+        refreshInterval: 1000,
+    });
+
+    const { // fetch message list data
+        data: messageListData,
+        error: messageListError,
+        isLoading: messageListIsLoading,
+    } = useSWR<type.RoomMessageListRes>(
+        () => {
+            if (roomId === null) return false;
+            return `/api/room/message/list?roomId=${roomId}`
+        }, getFetcher, { refreshInterval: 1000 }
+    )
+
     return (
         <div className='chat-room'>
             <aside className='room-list'>
@@ -10,32 +58,23 @@ export default function ChatRoom () {
                     <h1>Welcom, CYH!</h1>
                     <button className='create-room-button'></button>
                 </nav>
-                <RoomEntry name="Room 1" time = "13:03" recentUser="User 1" recentMessage="Short message." roomID={1}/>
-                <RoomEntry name="Room 2" time = "13:03" recentUser="User 2" recentMessage="Message long enough to break the block" roomID={1}/>
-                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
-                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
-                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
-                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
-                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
-                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
+                {roomData?.rooms.map(room => (
+                    <RoomEntry
+                        roomId={room.roomId}
+                        roomName={room.roomName || "Unnamed Room"}
+                        lastMessage={room.lastMessage}
+                        onRoomSelect={handleRoomSelect}
+                    />
+                ))}
             </aside>
             <div className='room-body'>
                 <div className='room-header'>
-                    <h1>Room 1</h1>
+                    <h1>{roomName || "Enter a room to start."}</h1>
                 </div>
                 <div className='message-area'>
-                    <MessageItem user="User 1" message="Short message." />
-                    <MessageItem user="User 2" message="Another way of adding styles to your application is to use CSS Modules.
-CSS Modules are convenient for components that are placed in separate files.
-The CSS inside a module is available only for the component that imported it, and you do not have to worry about name conflicts.
-Create the CSS module with the .module.css extension, example: mystyle.module.css." />
-                    <MessageItem user="zombie" message="zombie message." />
-                    <MessageItem user="zombie" message="zombie message." />
-                    <MessageItem user="zombie" message="zombie message." />
-                    <MessageItem user="zombie" message="zombie message." />
-                    <MessageItem user="zombie" message="zombie message." />
-                    <MessageItem user="zombie" message="zombie message." />
-                    <MessageItem user="zombie" message="zombie message." />
+                    {messageListData?.messages.map(message => (
+                        <MessageItem message={message} />
+                    ))}
                 </div>
                 <div className='input-area'>
                     <textarea placeholder='Start texting...' />
