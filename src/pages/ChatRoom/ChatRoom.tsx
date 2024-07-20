@@ -7,11 +7,17 @@ export default function ChatRoom () {
         <div className='chat-room'>
             <aside className='room-list'>
                 <nav className='operate'>
-                    <h1>Room List</h1>
-                    <button>Create</button>
+                    <h1>Welcom, CYH!</h1>
+                    <button className='create-room-button'></button>
                 </nav>
-                <RoomEntry name="Room 1" time = "13:03" recentUser="User 1" recentMessage="123"/>
-                <RoomEntry name="Room 2" time = "13:03" recentUser="User 2" recentMessage="234"/>
+                <RoomEntry name="Room 1" time = "13:03" recentUser="User 1" recentMessage="Short message." roomID={1}/>
+                <RoomEntry name="Room 2" time = "13:03" recentUser="User 2" recentMessage="Message long enough to break the block" roomID={1}/>
+                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
+                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
+                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
+                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
+                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
+                <RoomEntry name="zombie room" time = "11:45" recentUser="zombie" recentMessage="zombie message" roomID={1}/>
             </aside>
             <div className='room-body'>
                 <div className='room-header'>
@@ -32,10 +38,11 @@ Create the CSS module with the .module.css extension, example: mystyle.module.cs
                     <MessageItem user="zombie" message="zombie message." />
                 </div>
                 <div className='input-area'>
-                    <input type='text' placeholder='Start texting...' />
+                    <textarea placeholder='Start texting...' />
                     <button>Send</button>
                 </div>                
             </div>
         </div>
     )
 }
+

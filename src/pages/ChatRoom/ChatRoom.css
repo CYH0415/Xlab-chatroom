@@ -12,28 +12,93 @@ body {
 .room-list {
     width: 400px;
     overflow-y: auto;
-    border-right: 10px solid black;
+    padding: 10px;
+
+    border-right: 1px solid rgb(196, 196, 196);
+    background-color: #ffffff;
     
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 .operate {
     height: 50px;
     background-color: #f4f4f4;
 
+    padding-left: 10px;
+    padding-right: 10px;
+
     display: flex;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create-room-button {
+    position: relative;
+    padding-left: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: #4f4f4f; /* 背景颜色 */
+    border: none;
+    border-radius: 50%; /* 创建圆形 */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-room-button::before,
+.create-room-button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff; /* 加号的颜色 */
+}
+
+.create-room-button::before {
+    width: 70%; /* 加号横线的长度 */
+    height: 3px; /* 加号线条的厚度 */
+}
+
+.create-room-button::after {
+    height: 70%; /* 加号竖线的长度 */
+    width: 3px; /* 加号竖线的厚度 */
+}
+
+/* 鼠标悬停时改变背景色 */
+.create-room-button:hover {
+    background-color: #adadad;
 }
 
 .room-entry {
-    background-color: aliceblue;
-    padding-top: 1px;
-    padding-bottom: 1px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border: 3px solid #ccc;
-    border-radius: 6px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+    padding: 0px 10px 0px 10px;
+
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.room-entry:hover {
+    background-color: #ebebeb;
+}
+
+.room-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.room-entry p {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(127, 127, 127);
 }
 
 .room-body {
@@ -51,27 +116,73 @@ body {
 .message-area {
     flex-grow: 1;
     overflow-y: auto;
+    padding: 30px;
+    background-color: #ffffff;
 }
 
-.message {
+.message-box {
+    padding-bottom: 10px;
+}
+
+.message-box > p {
+    width: fit-content;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
-    word-wrap: break-word;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.message-box > p:hover {
+    background-color: #e0e0e0;
 }
 
 .input-area {
     height: 100px;
+    padding: 20px;
+    padding-top: 0;
+    margin-bottom: 20px;
+
+    backdrop-filter: blur(10px);
 
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 10px;
 }
 
-.input-area input {
-    width: calc(100% - 200px);
-    height: calc(100% - 30px);
+.input-area textarea {
+    width: calc(100% - 30px);
+    max-width: 800px;
+    overflow-y: auto;
+    resize: none;
+
+    font-size: 16px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    transition: all 0.3s ease;
+}
+
+.input-area :hover {
+    background-color: #e3e3e3;
+}
+
+.input-area :focus {
+    outline: none;
 }
 
 .input-area button {
-    height: calc(100% - 30px);
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.input-area button:hover {
+    background-color: #cecece;
 }

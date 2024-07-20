@@ -1,5 +1,6 @@
 interface RoomEntryProps {
     name: string;
+    roomID: number;
     recentUser: string;
     recentMessage: string;
     time: string;
@@ -7,8 +8,10 @@ interface RoomEntryProps {
 export default function RoomEntry ( props: RoomEntryProps ) {
     return (
         <div className='room-entry'>
-            <h3>{props.name}</h3>
-            <p> {props.time}</p>
+            <div className="room-entry-header">
+                <h3>{props.name}</h3>
+                <p> {props.time}</p>
+            </div>
             <p>{props.recentUser}: {props.recentMessage}</p>
         </div>
     )

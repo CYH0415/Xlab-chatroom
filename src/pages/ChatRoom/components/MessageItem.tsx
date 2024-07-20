@@ -5,7 +5,7 @@ interface MessageProps {
 
 export default function MessageItem ( props: MessageProps ) {
     return (
-        <div className='message'>
+        <div className='message-box'>
             <h3>{props.user}</h3>
             <p>{props.message}</p>
         </div>
