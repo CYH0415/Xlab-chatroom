@@ -1,11 +1,12 @@
-import { useState } from 'react'
+// import { useState } from 'react'
+import ChatRoom from './pages/ChatRoom/ChatRoom'
 import './App.css'
 
 function App() {
 
   return (
     <>
-      <h1>hello world!</h1>
+      <ChatRoom />
     </>
   )
 }
