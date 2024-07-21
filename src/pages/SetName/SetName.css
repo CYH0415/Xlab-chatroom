@@ -1,0 +1,56 @@
+.set-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: hsl(219, 100%, 93%);
+    padding: 2rem;
+}
+
+.set-name h1 {
+    font-size: 6rem;
+    margin-bottom: 12rem;
+}
+
+.set-name div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.set-name input {
+    font-size: 80px;
+    font-family:'Segoe UI';
+    font-weight: bold;
+
+    width: 660px;
+    height: 90px;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    transition: all 0.3s ease;
+}
+
+.set-name input:hover {
+    background-color: #e3e3e3;
+}
+
+.set-name input:focus {
+    outline: none;
+}
+
+.set-name button {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-size: 30px;
+}
+
+.set-name button:hover {
+    background-color: #cecece;
+}

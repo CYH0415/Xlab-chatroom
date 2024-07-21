@@ -1,7 +1,10 @@
 /* override default css */
+
 body {
     margin: 0;
 }
+
+/* custom scrollbar styles */
 
 ::-webkit-scrollbar {
     width: 10px;
@@ -34,7 +37,7 @@ body {
 }
 
 .aside {
-    width: 400px;
+    width: 350px;
     padding: 10px;
 
     border-right: 1px solid rgb(196, 196, 196);
@@ -72,9 +75,9 @@ body {
     padding-left: 10px;
     width: 30px;
     height: 30px;
-    background-color: #4f4f4f; /* 背景颜色 */
+    background-color: #6d6d6d;
     border: none;
-    border-radius: 50%; /* 创建圆形 */
+    border-radius: 50%;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -86,22 +89,48 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #fff; /* 加号的颜色 */
+    background-color: #fff;
 }
 
 .create-room-button::before {
-    width: 70%; /* 加号横线的长度 */
-    height: 3px; /* 加号线条的厚度 */
+    width: 60%;
+    height: 3px;
 }
 
 .create-room-button::after {
-    height: 70%; /* 加号竖线的长度 */
-    width: 3px; /* 加号竖线的厚度 */
+    height: 60%;
+    width: 3px;
 }
 
-/* 鼠标悬停时改变背景色 */
 .create-room-button:hover {
     background-color: #adadad;
+}
+
+.back-button {
+    position: relative;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    background-color: hsl(0, 0%, 46%);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 45%;
+        transform: translate(-50%, -50%);
+        border-style: solid;
+        border-width: 6px 10px 6px 0;
+        border-color: transparent #ffffff transparent transparent;
+    }
+
+    &:hover {
+        background-color: #b1b1b1;
+    }
 }
 
 .room-entry {
@@ -151,22 +180,68 @@ body {
     overflow-y: auto;
     padding: 30px;
     background-color: #ffffff;
+
+    display: flex;
+    flex-direction: column;
 }
 
-.message-box {
+.message {
     padding-bottom: 10px;
 }
 
-.message-box > p {
+.message p {
     width: fit-content;
     padding: 10px;
-    background-color: #f0f0f0;
+
+    overflow-wrap: break-word;
+    word-break: break-word;
+
     border-radius: 10px;
     transition: all 0.3s ease;
 }
 
-.message-box > p:hover {
+.message.left p {
+    background-color: #f0f0f0;
+}
+
+.message.left p:hover {
     background-color: #e0e0e0;
+}
+
+.message.right {
+    align-self: flex-end;
+}
+
+.message.right h3 {
+    text-align: right;
+}
+
+.message.right p {
+    background-color: #c9d5ff;
+}
+
+.message.right > p:hover {
+    background-color: #d9e1ff;
+}
+
+.message-box {
+    display: flex;
+    align-items: flex-end;
+}
+
+.message.left .message-box {
+    flex-direction: row;
+}
+
+.message.right .message-box {
+    flex-direction: row-reverse;
+}
+
+.message-box > span {
+    padding: 10px;
+
+    font-size: small;
+    color: #adadad;
 }
 
 .input-area {
